@@ -14,13 +14,18 @@ for i in filenames:
 
 while True:
 	query = input("Query: ")
-	encoding = encode(query)
-	dists = [torch.dist(encoding, i).item() for i in encodings]
-	min_ind = dists.index(min(dists))
-	print("Your File Is: {}".format(folder+"/"+filenames[min_ind]))
+	images = input("number: ")
 
-	my_img = cv2.imread(folder+"/"+filenames[min_ind])
-	#print(my_img)
-	cv2.imshow("My image", my_img)
-	cv2.waitKey(0)
-	cv2.destroyAllWindows()
+	encoding = encode(query)
+	dists = [torch.mean(torch.abs(encoding-i)).item() for i in encodings]
+	sorted_dists = sorted(dists, reverse=False)
+
+	# print(dists.index(min(dists)))
+	# print(filenames[dists.index(min(dists))])
+	indices = [dists.index(dist) for dist in sorted_dists]
+	for i in range(int(images)):
+		min_ind = indices[i]
+		my_img = cv2.imread(folder+"/"+filenames[min_ind])
+		cv2.imshow("My image", my_img)
+		cv2.waitKey(0)
+		cv2.destroyAllWindows()
