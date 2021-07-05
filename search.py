@@ -2,7 +2,8 @@ from classify import load, classify, encode
 import torch
 import os
 import cv2
-folder = "folder"
+# folder = "folder"
+folder = input("folder: ")
 filenames = os.listdir(folder)
 
 # get encodings for every image stored with the title
@@ -16,7 +17,7 @@ def getFirstFrame(videofile):
     vidcap = cv2.VideoCapture(videofile)
     success, image = vidcap.read()
     if success:
-        cv2.imwrite("../first_frame.jpg", image)  # save frame as JPEG file
+        cv2.imwrite("../{}.jpg".format(videofile.split("/")[-1]), image)  # save frame as JPEG file
 def rescan():
 	global encodings
 	global filenames
@@ -28,7 +29,7 @@ def rescan():
 			filename = f"{folder}/{i}"
 			encodings.append(encode(filename))
 		else:
-			filename = "../first_frame.jpg"
+			filename = "../{}.jpg".format(i.split("/")[-1])
 			getFirstFrame(f"{folder}/{i}")
 			encodings.append(encode(filename))
 rescan()
